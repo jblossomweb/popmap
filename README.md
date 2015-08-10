@@ -18,7 +18,7 @@ The specific UI design of this exercise is up to you. We hope you take it as an 
 
 ### Network Map Management
 
-1. Use the following addresses to drop pins on the map that represent our pop's:
+#### Use the following addresses to drop pins on the map that represent our pop's:
 
 * Switch and Data - 111 8th Ave, New York, NY 10011
 * Equinix, Cage 1010 - 21715 Filigree Ct., Ashburn VA 20147
@@ -29,7 +29,7 @@ The specific UI design of this exercise is up to you. We hope you take it as an 
 * 2001 Sixth Ave, Seattle WA, 98121
 * 50 Northeast 9th Street, Miami, FL
 
-2. Draw lines on the map that make the following "network" connections (assume they are all bi-directional, no need to visually represent that, just understand that point).
+#### Draw lines on the map that make the following "network" connections (assume they are all bi-directional, no need to visually represent that, just understand that point).
 
 * NY <-> DC
 * DC <-> Atlanta
@@ -41,13 +41,13 @@ The specific UI design of this exercise is up to you. We hope you take it as an 
 * Seattle <-> Chicago
 * Chicago <-> NY
 
-3. Display the distance between the two pop's in the map UI. Feel free to use this (http://www.movable-type.co.uk/scripts/latlong.html) to calculate the distance.
+#### Display the distance between the two pop's in the map UI. Feel free to use this (http://www.movable-type.co.uk/scripts/latlong.html) to calculate the distance.
 
 ### Client/Destination routing
 
-1. The UI should accept two street addresses as a pair. One labeled "client" and the other labeled "server". The "server" address can only be one of the street addresses of the network POP's. Drop a pin onto the map for the client address, draw a line entering the network using the closest POP to the "client", and then draw a line through the network to get to the POP with the destination server.
+The UI should accept two street addresses as a pair. One labeled "client" and the other labeled "server". The "server" address can only be one of the street addresses of the network POP's. Drop a pin onto the map for the client address, draw a line entering the network using the closest POP to the "client", and then draw a line through the network to get to the POP with the destination server.
 
-2. All inputted address pairs should be retained and displayed somewhere in the UI. You should be able to select the pair and have the map redraw the route.
+All inputted address pairs should be retained and displayed somewhere in the UI. You should be able to select the pair and have the map redraw the route.
 
 _Bonus points (not required): Get the client to the server with as little physical distance as possible, and display on the screen proof that it was the shortest distance._
 
@@ -60,12 +60,12 @@ Also uses [ng-map](http://ngmap.github.io/) directive for AngularJS, which expos
 ## Installation
 1. Clone this project or Download that ZIP file
 2. Make sure you have [bower](http://bower.io/), [gulp](https://www.npmjs.com/package/gulp) and  [npm](https://www.npmjs.org/) installed globally
-3. On the command prompt run the following commands
-- cd `project-directory`
-- `bower install`
-- `npm install`
-- `gulp serve` - For development mode
-- `gulp build` - concat, minify and generate the files for deployment
+3. On the command prompt run the following commands:
+* cd `project-directory`
+* `bower install`
+* `npm install`
+* `gulp serve` - For development mode
+* `gulp build` - concat, minify and generate the files for deployment
 
 ### Automation tools
 
