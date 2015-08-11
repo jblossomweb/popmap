@@ -1,0 +1,57 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>POP Dashboard</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <link rel="shortcut icon" href="//cms-staticcdn.highwinds.com/rev/764e9685-dc75-0872-0000-00000000099e/favicon.ico" type="image/x-icon">
+        <link rel="apple-touch-icon" href="//cms-staticcdn.highwinds.com/rev/764e9685-dc75-0872-0000-000000000acc/img/apple-icon.png"/>
+        <!-- build:css(.tmp) styles/vendor.css -->
+        <!-- bower:css -->
+        <link rel="stylesheet" href="../bower_components/fontawesome/css/font-awesome.css" />
+        <link rel="stylesheet" href="../bower_components/angular-snap/angular-snap.css" />
+        <!-- endbower -->
+        <!-- endbuild -->
+        <!-- build:css(.tmp) styles/main.css -->
+        <link rel="stylesheet" href="styles/main.css">
+        <!-- endbuild -->
+    </head>
+    <body ng-app="popmap">
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div>
+            <div ui-view></div>
+        </div>
+
+
+        <!-- build:js scripts/oldieshim.js -->
+        <!--[if lt IE 9]>
+        <script src="../bower_components/es5-shim/es5-shim.js"></script>
+        <script src="../bower_components/json3/lib/json3.js"></script>
+        <![endif]-->
+        <!-- endbuild -->
+
+        <!-- build:js scripts/vendor.js -->
+        <!-- bower:js -->
+        <script src="../bower_components/angular/angular.js"></script>
+        <script src="../bower_components/angular-mocks/angular-mocks.js"></script>
+        <script src="../bower_components/ui-router/release/angular-ui-router.js"></script>
+        <script src="../bower_components/angular-animate/angular-animate.js"></script>
+        <script src="../bower_components/snapjs/snap.js"></script>
+        <script src="../bower_components/angular-snap/angular-snap.js"></script>
+        <script src="../bower_components/ngmap/build/scripts/ng-map.js"></script>
+        <!-- endbower -->
+        <!-- endbuild -->
+
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="scripts/app.js"></script>
+        <script src="scripts/controllers/login.js"></script>
+        <script src="scripts/controllers/dashboard.js"></script>
+        <!-- endbuild -->
+    </body>
+</html>
