@@ -8,14 +8,14 @@
  *
  * Main module of the application.
  */
- angular
- .module('popmap', [
+ var app = angular.module('popmap', [
     'ui.router',
     'snap',
     'ngAnimate',
     'ngMap'
-    ])
- .config(function($stateProvider, $urlRouterProvider) {
+  ])
+ 
+ app.config(function($stateProvider, $urlRouterProvider) {
 
     $urlRouterProvider.when('/dashboard', '/dashboard/home')
     $urlRouterProvider.otherwise('/login')
@@ -54,19 +54,24 @@
         templateUrl: 'views/dashboard/reports.html'
     })
 })
-.controller('MapCtrl', function($scope, $timeout) {
+
+app.factory('addresses', [function(){
+  // TODO: get from an API
+  return [
+    'Switch and Data - 111 8th Ave, New York, NY 10011',
+    'Equinix, Cage 1010 - 21715 Filigree Ct., Ashburn VA 20147',
+    'UseNetServer Fourth Floor - 56 Marietta St., Atlanta, GA 30303',
+    'Dallas,"1950 Stemmons Frwy"',
+    'One Wilshire Bldg., 11th Fl, Cage C1111 - 624 S. Grand Ave, Los Angeles, CA 90017',
+    'Equinix - 350 E Cermak Rd, Chicago, IL 60616',
+    '2001 Sixth Ave, Seattle WA, 98121',
+    '50 Northeast 9th Street, Miami, FL'
+  ]
+}])
+
+app.controller('MapCtrl', ['$scope','$timeout','addresses',function($scope, $timeout, addresses) {
     var geocoder = new google.maps.Geocoder()
-    //TODO: pull out to factory
-    $scope.addresses = [
-      'Switch and Data - 111 8th Ave, New York, NY 10011',
-      'Equinix, Cage 1010 - 21715 Filigree Ct., Ashburn VA 20147',
-      'UseNetServer Fourth Floor - 56 Marietta St., Atlanta, GA 30303',
-      'Dallas,"1950 Stemmons Frwy"',
-      'One Wilshire Bldg., 11th Fl, Cage C1111 - 624 S. Grand Ave, Los Angeles, CA 90017',
-      'Equinix - 350 E Cermak Rd, Chicago, IL 60616',
-      '2001 Sixth Ave, Seattle WA, 98121',
-      '50 Northeast 9th Street, Miami, FL'
-    ]
+    $scope.addresses = addresses
     $scope.toggleBounce = function() {
       if (this.getAnimation() != null) {
         this.setAnimation(null)
@@ -96,4 +101,4 @@
         $scope.markersDropped = true
       }
     }
-})
+}])
