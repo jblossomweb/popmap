@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * @ngdoc function
@@ -12,9 +12,10 @@ angular.module('popmap')
 
     $scope.submit = function() {
 
-      $location.path('/dashboard');
+    	// TODO: some login actions
+      $location.path('/dashboard')
 
-      return false;
+      return false
     }
 
-  });
+  })

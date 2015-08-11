@@ -16,9 +16,19 @@
 		</div>
 		<span class="glyphicon glyphicon-globe bg-fade"></span>
 		<div class="jumbotron">
-			<div class="container">
-				<h1>Add Map here</h1>
+			<div class="container" ng-controller="MapCtrl">
+				<h1>POP Map</h1>
 				<p>
+					<div class="map">
+					  <map center="39.5, -98.35" zoom="3">
+					    <info-window position="current-location" visible="true">
+					      <span>You are here</span>
+					    </info-window>
+					  </map>
+					</div>
+				</p>
+				<p>
+					<a class="btn btn-primary btn-lg btn-white" ng-click="addMarkers()"><i class="fa fa-map-marker"></i> Drop Markers</a>
 					<a class="btn btn-primary btn-lg btn-white" ui-sref="home"><i class="fa fa-home"></i> Back to Home</a>
 				</p>
 			</div>

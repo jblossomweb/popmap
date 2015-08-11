@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * @ngdoc function
@@ -10,6 +10,6 @@
 angular.module('popmap')
   .controller('DashboardCtrl', function($scope, $state) {
 
-    $scope.$state = $state;
+    $scope.$state = $state
 
-  });
+  })
