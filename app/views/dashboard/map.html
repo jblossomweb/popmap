@@ -20,15 +20,12 @@
 				<h1>POP Map</h1>
 				<p>
 					<div class="map">
-					  <map center="39.5, -98.35" zoom="3">
-<!-- 					    <info-window position="current-location" visible="true">
-					      <span>You are here</span>
-					    </info-window> -->
-					  </map>
+					  <map center="39.5, -98.35" zoom="3"></map>
 					</div>
 				</p>
 				<p>
-					<a class="btn btn-primary btn-lg btn-white animate-hide" ng-click="addMarkers()" ng-hide="markersDropped"><i class="fa fa-map-marker"></i> Drop Markers</a>
+					<a class="btn btn-primary btn-lg btn-white animate-hide" ng-click="addMarkers()" ng-hide="markersDrop"><i class="fa fa-map-marker"></i> Drop Markers</a>
+					<!-- <a class="btn btn-primary btn-lg btn-white animate-hide" ng-click="connectMarkers()" ng-show="markersDropped"><i class="fa fa-map-marker"></i> Connect Markers</a> -->
 					<a class="btn btn-primary btn-lg btn-white" ui-sref="home"><i class="fa fa-home"></i> Back to Home</a>
 				</p>
 			</div>
