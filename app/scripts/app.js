@@ -75,9 +75,9 @@
       }
     }
     var iterator=0
-    var markersDropped = false
+    $scope.markersDropped = false
     $scope.addMarkers = function() {
-      if(!markersDropped){
+      if(!$scope.markersDropped){
         for (var i=0; i<$scope.addresses.length; i++) {
           $timeout(function() {
             // add a marker this way does not sync. marker with <marker> tag
@@ -92,7 +92,8 @@
             })
           }, i * 200)
         }
-        markersDropped = true
+        //TODO: promise/callback
+        $scope.markersDropped = true
       }
     }
 })
