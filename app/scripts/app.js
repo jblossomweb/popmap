@@ -250,7 +250,18 @@ app.controller('MapCtrl', [
         var path = line.getPath()
         path.push(start)
         path.push(finish)
-        resolve(line)
+        $scope.getDistance(start,finish).then(function(distance){
+          line.distance = distance // meters
+          console.log(Math.round(line.distance / 1000) + ' km')
+          resolve(line)
+        })
+      })
+    }
+
+    $scope.getDistance = function(start,finish){
+      return $q(function(resolve, reject) {
+        var distance = google.maps.geometry.spherical.computeDistanceBetween(start,finish)
+        resolve(distance)
       })
     }
 }])
