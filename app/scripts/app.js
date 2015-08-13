@@ -58,57 +58,57 @@ app.config(function($stateProvider, $urlRouterProvider) {
 app.factory('addresses', [function(){
   // TODO: get from an API
   return {
-    NY: { address: 'Switch and Data - 111 8th Ave, New York, NY 10011'},
-    DC: { address: 'Equinix, Cage 1010 - 21715 Filigree Ct., Ashburn VA 20147'},
-    Atlanta: { address: 'UseNetServer Fourth Floor - 56 Marietta St., Atlanta, GA 30303'},
-    Dallas: { address: 'Dallas,"1950 Stemmons Frwy"'},
-    LA: { address: 'One Wilshire Bldg., 11th Fl, Cage C1111 - 624 S. Grand Ave, Los Angeles, CA 90017'},
-    Chicago: { address: 'Equinix - 350 E Cermak Rd, Chicago, IL 60616'},
-    Seattle: { address: '2001 Sixth Ave, Seattle WA, 98121'},
-    Miami: { address: '50 Northeast 9th Street, Miami, FL'}
+    ny: { name: 'New York', address: 'Switch and Data - 111 8th Ave, New York, NY 10011'},
+    dc: { name: 'Washington', address: 'Equinix, Cage 1010 - 21715 Filigree Ct., Ashburn VA 20147'},
+    atl: { name: 'Atlanta', address: 'UseNetServer Fourth Floor - 56 Marietta St., Atlanta, GA 30303'},
+    dal: { name: 'Dallas', address: 'Dallas,"1950 Stemmons Frwy"'},
+    la: { name: 'Los Angeles', address: 'One Wilshire Bldg., 11th Fl, Cage C1111 - 624 S. Grand Ave, Los Angeles, CA 90017'},
+    chi: { name: 'Chicago', address: 'Equinix - 350 E Cermak Rd, Chicago, IL 60616'},
+    sea: { name: 'Seattle', address: '2001 Sixth Ave, Seattle WA, 98121'},
+    mia: { name: 'Miami', address: '50 Northeast 9th Street, Miami, FL'}
   }
 }])
 
 app.factory('connections', ['addresses', function(addresses){
   // TODO: get from an API
-  return [
-    {
-      start: addresses.NY,
-      finish: addresses.DC
+  return {
+    'ny-dc': {
+      start: addresses.ny,
+      finish: addresses.dc
     },
-    {
-      start: addresses.DC,
-      finish: addresses.Atlanta
+    'dc-atl': {
+      start: addresses.dc,
+      finish: addresses.atl
     },
-    {
-      start: addresses.Atlanta,
-      finish: addresses.Miami
+    'atl-mia': {
+      start: addresses.atl,
+      finish: addresses.mia
     },
-    {
-      start: addresses.Atlanta,
-      finish: addresses.Dallas
+    'atl-dal': {
+      start: addresses.atl,
+      finish: addresses.dal
     },
-    {
-      start: addresses.Dallas,
-      finish: addresses.Miami
+    'dal-mia': {
+      start: addresses.dal,
+      finish: addresses.mia
     },
-    {
-      start: addresses.Dallas,
-      finish: addresses.LA
+    'dal-la': {
+      start: addresses.dal,
+      finish: addresses.la
     },
-    {
-      start: addresses.LA,
-      finish: addresses.Seattle
+    'la-sea': {
+      start: addresses.la,
+      finish: addresses.sea
     },
-    {
-      start: addresses.Seattle,
-      finish: addresses.Chicago
+    'sea-chi': {
+      start: addresses.sea,
+      finish: addresses.chi
     },
-    {
-      start: addresses.Chicago,
-      finish: addresses.NY
+    'chi-ny': {
+      start: addresses.chi,
+      finish: addresses.ny
     }
-  ]
+  }
 }])
 
 app.controller('MapCtrl', [
@@ -174,12 +174,19 @@ app.controller('MapCtrl', [
         $scope.markersConnect = true
         var promise = $q.all(null)
         angular.forEach($scope.connections, function(connection, i) {
+          // TODO: modularize callback hell
           promise = promise.then(function(){
             return $q(function(resolve) {
               return $scope.getLocation(connection.start).then(function(start){
                 return $scope.getLocation(connection.finish).then(function(finish){
                   return $timeout(function(){
                     return $scope.drawLine(start,finish).then(function(line){
+
+                      connection.line = line
+                      connection.displayMiles = Math.round(line.distance.miles)    
+
+                      console.log(connection.displayMiles + ' miles')             
+
                       resolve(line)
                     })
                   },250)
@@ -258,7 +265,6 @@ app.controller('MapCtrl', [
             kilometers: meters / 1000,
             miles: 0.000621371 * meters
           }
-          console.log(Math.round(line.distance.miles) + ' miles')
 
           resolve(line)
         })
