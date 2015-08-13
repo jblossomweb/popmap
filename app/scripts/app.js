@@ -239,20 +239,27 @@ app.controller('MapCtrl', [
       })
     }
 
-    $scope.drawLine = function(start,finish){
+    $scope.drawLine = function(start,finish,options){
+      if(!options) var options = {}
       return $q(function(resolve) {
         var line = new google.maps.Polyline({
-          strokeColor: '#000000',
-          strokeOpacity: 0.7,
-          strokeWeight: 2,
+          strokeColor: options.color || '#000000',
+          strokeOpacity: options.opacity || 0.7,
+          strokeWeight: options.weight || 2,
           map: $scope.map
         })
         var path = line.getPath()
         path.push(start)
         path.push(finish)
-        $scope.getDistance(start,finish).then(function(distance){
-          line.distance = distance // meters
-          console.log(Math.round(line.distance / 1000) + ' km')
+        $scope.getDistance(start,finish).then(function(meters){
+          
+          line.distance = {
+            meters: meters,
+            kilometers: meters / 1000,
+            miles: 0.000621371 * meters
+          }
+          console.log(Math.round(line.distance.miles) + ' miles')
+
           resolve(line)
         })
       })
