@@ -20,13 +20,28 @@
 				<h1>POP Map</h1>
 				<p>
 					<div class="map">
-					  <map center="39.5, -98.35" zoom="3"></map>
+					  <map center="40, -112" zoom="3"></map>
+
+					  <div class="overlay">
+					  	<p class="terminal">
+					  		<span class="cursor" ng-hide="markersDrop">_</span>
+
+					  		<span ng-repeat="location in displayLocations" class="cssFade" ng-hide="markersConnect">
+								    {{location.address.name}}
+								</span>
+					  		<span ng-repeat="connection in displayConnections">
+								    {{connection.start.name}} - {{connection.finish.name}}<br>
+								    ({{connection.displayMiles}} miles)
+								</span>
+					  	</p>
+					  </div>
 					</div>
 				</p>
 				<p>
-					<a class="btn btn-primary btn-lg btn-white animate-hide" ng-click="addMarkers()" ng-hide="markersDrop"><i class="fa fa-map-marker"></i> Drop Markers</a>
+					<a class="btn btn-primary btn-lg btn-white animate-hide" class="cssFade" ng-click="addMarkers()" ng-hide="markersDrop"><i class="fa fa-map-marker"></i> Drop Markers</a>
 
-					<!-- <a class="btn btn-primary btn-lg btn-white animate-hide" ng-click="connectMarkers()" ng-show="markersDropped"><i class="fa fa-map-marker"></i> Connect Markers</a> -->
+
+<!-- 					<a class="btn btn-primary btn-lg btn-white animate-hide" ng-click="connectMarkers()" ng-show="markersDropped" ng-hide="markersConnect"><i class="fa fa-map-marker"></i> Connect Markers</a> -->
 
 					<a class="btn btn-primary btn-lg btn-white" ui-sref="home"><i class="fa fa-home"></i> Back to Home</a>
 				</p>

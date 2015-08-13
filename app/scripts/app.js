@@ -124,10 +124,10 @@ app.controller('MapCtrl', [
     $scope.addresses = addresses
     $scope.connections = connections
 
-    $scope.markersDrop = false
-    $scope.markersDropped = false
-    $scope.markersConnect = false
-    $scope.markersConnected = false
+    // $scope.markersDrop = false
+    // $scope.markersDropped = false
+    // $scope.markersConnect = false
+    // $scope.markersConnected = false
 
     // safety limit for recursion loop
     $scope.retry = 0
@@ -142,17 +142,23 @@ app.controller('MapCtrl', [
     }
 
     $scope.addMarkers = function() {
-      
+
       if(!$scope.markersDrop){
         $scope.markersDrop = true
 
         var promise = $q.all(null)
+
+        $scope.displayLocations = []
+
         angular.forEach($scope.addresses, function(address, i) {
           promise = promise.then(function(){
             return $q(function(resolve) {
               return $scope.getLocation(address).then(function(location){
+                location.address = address
                 return $timeout(function(){
                   return $scope.markLocation(location).then(function(marker){
+                    location.marker = marker
+                    $scope.displayLocations.push(location)
                     resolve(marker)
                   })
                 },250)
@@ -162,9 +168,11 @@ app.controller('MapCtrl', [
         })
 
         promise.then(function(){
-          $scope.markersDropped = true
-          // i could fire the connect method here
-          $scope.connectMarkers()
+          return $timeout(function(){
+            $scope.markersDropped = true
+            $scope.connectMarkers()
+          },1250)
+          
         })
       }
     }
@@ -172,8 +180,14 @@ app.controller('MapCtrl', [
     $scope.connectMarkers = function() {
       if($scope.markersDropped && !$scope.markersConnect){
         $scope.markersConnect = true
+
         var promise = $q.all(null)
-        angular.forEach($scope.connections, function(connection, i) {
+
+        $scope.displayConnections = []
+
+        angular.forEach($scope.connections, function(connection, id) {
+          connection.id = id
+
           // TODO: modularize callback hell
           promise = promise.then(function(){
             return $q(function(resolve) {
@@ -181,12 +195,9 @@ app.controller('MapCtrl', [
                 return $scope.getLocation(connection.finish).then(function(finish){
                   return $timeout(function(){
                     return $scope.drawLine(start,finish).then(function(line){
-
                       connection.line = line
-                      connection.displayMiles = Math.round(line.distance.miles)    
-
-                      console.log(connection.displayMiles + ' miles')             
-
+                      connection.displayMiles = Math.round(line.distance.miles)
+                      $scope.displayConnections.push(connection)
                       resolve(line)
                     })
                   },250)
@@ -241,7 +252,9 @@ app.controller('MapCtrl', [
           position: location,
           map: $scope.map,
           draggable: false,
-          animation: google.maps.Animation.DROP
+          animation: google.maps.Animation.DROP,
+          title: location.address ? location.address.name || null : null,
+          label: location.address ? location.address.id || null : null
         }))
       })
     }
@@ -276,5 +289,13 @@ app.controller('MapCtrl', [
         var distance = google.maps.geometry.spherical.computeDistanceBetween(start,finish)
         resolve(distance)
       })
+    }
+
+    $scope.hideConnections = function(){
+
+    }
+
+    $scope.hideMarkers = function(){
+
     }
 }])

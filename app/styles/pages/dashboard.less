@@ -198,3 +198,56 @@ snap-drawer {
         cursor: pointer;
     }
 }
+
+div.map {
+  position:relative;
+
+  div.overlay {
+    position:absolute;
+    bottom:12%;
+    left:6%;
+    width:25%;
+    height:82%;
+    overflow:hidden;
+    background: #000;
+    color:#fff;
+
+    .drop-shadow (4px, 4px, 2px, 0, 0.65);
+    .border-radius (4px);
+
+    p.terminal{
+
+      position:absolute;
+      bottom:-1.3em;
+
+      font-size:.6em;
+      padding:.3em;
+
+      font-family: Monaco, 'Lucida Console', monospace;
+
+      span {
+        color:#00FF00;
+        display:block;
+        margin-bottom:0.5em;
+      }
+
+      span.cursor{
+        .blink(0.7s);
+        .ng-hide{
+          display:none;
+          .blink(0);
+        }
+      }
+      
+    }
+  }
+}
+
+
+.cssFade {
+    transition: 0.25s linear all;
+    opacity: 1;
+}
+.cssFade.ng-hide {
+    opacity: 0;
+}
