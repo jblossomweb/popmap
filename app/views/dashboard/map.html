@@ -21,29 +21,41 @@
 				<p>
 					<div class="map">
 					  <map center="40, -112" zoom="3"></map>
-
 					  <div class="overlay">
 					  	<p class="terminal">
 					  		<span class="cursor" ng-hide="markersDrop">_</span>
-
 					  		<span ng-repeat="location in displayLocations" class="cssFade" ng-hide="markersConnect">
-								    {{location.address.name}}
+								    <a style="color:#{{location.pop.color}}">{{location.pop.name}}</a>
 								</span>
 					  		<span ng-repeat="connection in displayConnections">
-								    {{connection.start.name}} - {{connection.finish.name}}<br>
+								    <a style="color:#{{connection.start.color}}">{{connection.start.name}}</a> - <a style="color:#{{connection.finish.color}}">{{connection.finish.name}}</a><br>
 								    ({{connection.displayMiles}} miles)
 								</span>
+
+								<!-- <span class="cssFade" ng-hide="showServerInput">
+								</span> -->
 					  	</p>
 					  </div>
 					</div>
 				</p>
 				<p>
-					<a class="btn btn-primary btn-lg btn-white animate-hide" class="cssFade" ng-click="addMarkers()" ng-hide="markersDrop"><i class="fa fa-map-marker"></i> Drop Markers</a>
+					<a class="btn btn-primary btn-lg btn-white animate-hide" ng-click="addMarkers()" ng-hide="markersDrop"><i class="fa fa-map-marker"></i> Drop Markers</a>
 
+					<a class="btn btn-primary btn-lg btn-white animate-hide" ng-click="connectMarkers()" ng-show="showConnectButton"><i class="fa fa-map-marker"></i> Connect Markers</a>
 
-<!-- 					<a class="btn btn-primary btn-lg btn-white animate-hide" ng-click="connectMarkers()" ng-show="markersDropped" ng-hide="markersConnect"><i class="fa fa-map-marker"></i> Connect Markers</a> -->
+					<!-- <a class="btn btn-primary btn-lg btn-white" ui-sref="home"><i class="fa fa-home"></i> Back to Home</a> -->
 
-					<a class="btn btn-primary btn-lg btn-white" ui-sref="home"><i class="fa fa-home"></i> Back to Home</a>
+					<div ng-show="showClientInput" class="cssFade form-group">
+						<label for="selectPop">Click a client location, or enter address:</label>
+					  <input type="text" class="form-control" placeholder="Client Address" name="client" ng-model="client.address" ng-model-options="{ updateOn: 'change blur' }">
+					</div>
+
+					<div ng-show="showServerInput" class="cssFade form-group">
+						<label for="selectPop">Click a destination POP, or select from dropdown: <a ng-click="initForm()">(cancel)</a></label>
+					  <select class="form-control" name="server" ng-model="server.id">
+					    <option ng-repeat="pop in pops" ng-selected="server.id == pop.id" ng-model-options="{ updateOn: 'change blur' }" ng-value="pop.id">{{pop.name}}</option>
+					  </select>
+					</div>
 				</p>
 			</div>
 		</div>
