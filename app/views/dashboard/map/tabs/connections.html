@@ -1,0 +1,9 @@
+<span ng-if="markersDropped && !markersConnect"><a ng-click="connectMarkers()">Click to Connect POPs</a></span>
+<span class="cursor" ng-hide="markersConnect">_</span>
+
+<span ng-repeat="connection in displayConnections" class="cssFade" ng-show="markersConnect">
+    <a style="color:#{{connection.start.color}}">{{smallScreen ? connection.start.short : connection.start.name}}</a> - <a style="color:#{{connection.finish.color}}">{{smallScreen ? connection.finish.short : connection.finish.name}}</a> ({{connection.displayMiles}} mi.)
+</span>
+
+<span ng-if="markersConnected && !client.location.address" ng-hide="client.location.address">Choose client address</span>
+<span ng-if="markersConnected && !client.location.address" class="cursor" ng-hide="client.location.address">_</span>

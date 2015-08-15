@@ -12,7 +12,8 @@ var app = angular.module('popmap', [
   'ui.router',
   'snap',
   'ngAnimate',
-  'ngMap'
+  'ngMap',
+  'ui.bootstrap'
 ])
  
 app.config(function($stateProvider, $urlRouterProvider) {
@@ -58,14 +59,14 @@ app.config(function($stateProvider, $urlRouterProvider) {
 app.factory('pops', [function(){
   // TODO: get from an API
   return {
-    ny: { name: 'New York', address: 'Switch and Data - 111 8th Ave, New York, NY 10011', color: '52779a'},
-    dc: { name: 'Washington', address: 'Equinix, Cage 1010 - 21715 Filigree Ct., Ashburn VA 20147', color: 'aaaaaa'},
-    atl: { name: 'Atlanta', address: 'UseNetServer Fourth Floor - 56 Marietta St., Atlanta, GA 30303', color: 'cc223c'},
-    dal: { name: 'Dallas', address: 'Dallas,"1950 Stemmons Frwy"', color: '0972b4'},
-    la: { name: 'Los Angeles', address: 'One Wilshire Bldg., 11th Fl, Cage C1111 - 624 S. Grand Ave, Los Angeles, CA 90017', color: 'ffbc01'},
-    chi: { name: 'Chicago', address: 'Equinix - 350 E Cermak Rd, Chicago, IL 60616', color: '4ab9e6'},
-    sea: { name: 'Seattle', address: '2001 Sixth Ave, Seattle WA, 98121', color: '69be3f'},
-    mia: { name: 'Miami', address: '50 Northeast 9th Street, Miami, FL', color: 'f25e18'}
+    ny: { short: 'NY', name: 'New York', address: 'Switch and Data - 111 8th Ave, New York, NY 10011', color: '52779a'},
+    dc: { short: 'DC', name: 'Washington', address: 'Equinix, Cage 1010 - 21715 Filigree Ct., Ashburn VA 20147', color: 'aaaaaa'},
+    atl: { short: 'ATL', name: 'Atlanta', address: 'UseNetServer Fourth Floor - 56 Marietta St., Atlanta, GA 30303', color: 'cc223c'},
+    dal: { short: 'DAL', name: 'Dallas', address: 'Dallas,"1950 Stemmons Frwy"', color: '0972b4'},
+    la: { short: 'LA', name: 'Los Angeles', address: 'One Wilshire Bldg., 11th Fl, Cage C1111 - 624 S. Grand Ave, Los Angeles, CA 90017', color: 'ffbc01'},
+    chi: { short: 'CHI', name: 'Chicago', address: 'Equinix - 350 E Cermak Rd, Chicago, IL 60616', color: '4ab9e6'},
+    sea: { short: 'SEA', name: 'Seattle', address: '2001 Sixth Ave, Seattle WA, 98121', color: '69be3f'},
+    mia: { short: 'MIA', name: 'Miami', address: '50 Northeast 9th Street, Miami, FL', color: 'f25e18'}
   }
 }])
 
@@ -111,24 +112,60 @@ app.factory('connections', ['pops', function(pops){
   }
 }])
 
+app.factory('maptabs', [function(){
+  return {
+    1: { 
+      heading: 'POPs', 
+      click: 'addMarkers()', 
+      exist: 'yes', 
+      content: 'views/dashboard/map/tabs/pops.html'
+    },
+    2: { 
+      heading: 'Conns', 
+      click: 'connectMarkers()', 
+      exist: 'markersDropped', 
+      content: 'views/dashboard/map/tabs/connections.html'
+    },
+    3: { 
+      heading: 'Routes', 
+      click: '', 
+      exist: 'clientMarked', 
+      content: 'views/dashboard/map/tabs/routes.html'
+    },
+  }
+}])
+
+// map controller
 app.controller('MapCtrl', [
   '$scope',
   '$q',
   '$timeout',
+  '$window',
   'pops', 
-  'connections', 
-  function($scope, $q, $timeout, pops, connections) {
+  'connections',
+  'maptabs',
+  function($scope, $q, $timeout, $window, pops, connections, maptabs) {
     
     var geocoder = new google.maps.Geocoder()
 
+    $scope.yes = true
+
     $scope.pops = pops
     $scope.connections = connections
+    $scope.maptabs = maptabs
 
     // safety limit for recursion loop
     $scope.retry = 0
     $scope.retryLimit = 10
 
-    // $scope.originalCenter = $scope.map.getCenter()
+    // hacky but necessary
+    if($window.innerWidth > 480){
+      $scope.mapZoom = 3
+      $scope.smallScreen = false
+    } else {
+      $scope.mapZoom = 2
+      $scope.smallScreen = true
+    }
 
     $scope.$watch('map',function(map){
       $scope.originalCenter = map.getCenter()
@@ -144,7 +181,6 @@ app.controller('MapCtrl', [
     }
 
     $scope.addMarkers = function() {
-
       if(!$scope.markersDrop){
         $scope.markersDrop = true
 
@@ -188,6 +224,12 @@ app.controller('MapCtrl', [
 
     $scope.connectMarkers = function() {
       $scope.showConnectButton = false
+      $scope.showConnections = true
+      
+      $scope.maptabs[1].active = false
+      $scope.maptabs[2].active = true
+      $scope.maptabs[3].active = false
+
       if($scope.markersDropped && !$scope.markersConnect){
         $scope.markersConnect = true
 
@@ -230,7 +272,7 @@ app.controller('MapCtrl', [
           // save an api call if already geocoded
           resolve(location.address)
         } else {
-          // reverse geocode the location
+          // reverse geocode the location 
           geocoder.geocode({'location': location}, function(results, status) {
             if(status === 'OVER_QUERY_LIMIT'){
               if($scope.retry < $scope.retryLimit){
@@ -307,7 +349,9 @@ app.controller('MapCtrl', [
           } else if (status !== 'OK'){
             reject(new Error(status))
           } else {
-            resolve(results[0].geometry.location)
+            var location = results[0].geometry.location
+            location.address = results[0].formatted_address || address
+            resolve(location)
           }
         })
       })
@@ -389,6 +433,12 @@ app.controller('MapCtrl', [
 
     $scope.markClient = function(location){
       $scope.client.location = location
+      $scope.clientMark = true
+
+      $scope.maptabs[1].active = false
+      $scope.maptabs[2].active = false
+      $scope.maptabs[3].active = true
+
       if($scope.unWatchClient){
         $scope.unWatchClient()
       }
@@ -408,6 +458,7 @@ app.controller('MapCtrl', [
             weight: 4
           }).then(function(line){
               $scope.pathLines.push(line)
+              $scope.clientMarked = true
               // default to closest.
               $scope.server = $scope.closestPop
               // listen for change

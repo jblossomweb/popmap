@@ -20,21 +20,19 @@
 				<h1>POP Map</h1>
 				<p>
 					<div class="map">
-					  <map center="40, -112" zoom="3"></map>
-					  <div class="overlay">
-					  	<p class="terminal">
-					  		<span class="cursor" ng-hide="markersDrop">_</span>
-					  		<span ng-repeat="location in displayLocations" class="cssFade" ng-hide="markersConnect">
-								    <a style="color:#{{location.pop.color}}">{{location.pop.name}}</a>
-								</span>
-					  		<span ng-repeat="connection in displayConnections">
-								    <a style="color:#{{connection.start.color}}">{{connection.start.name}}</a> - <a style="color:#{{connection.finish.color}}">{{connection.finish.name}}</a><br>
-								    ({{connection.displayMiles}} miles)
-								</span>
 
-								<!-- <span class="cssFade" ng-hide="showServerInput">
-								</span> -->
-					  	</p>
+					  <map center="40, -112" zoom="{{mapZoom}}"></map>
+
+					  <div class="overlay">
+					  	<tabset justified="true">
+					  		<tab ng-repeat="tab in maptabs" heading="{{tab.heading}}" active="tab.active" disable="tab.disabled">
+					  			<div class="tab-scrollbox">
+							    	<p class="terminal">
+						      		<ng-include src="tab.content"></ng-include>
+						      	</p>
+						      </div>
+						    </tab>
+						  </tabset>
 					  </div>
 					</div>
 				</p>
@@ -46,7 +44,7 @@
 					<!-- <a class="btn btn-primary btn-lg btn-white" ui-sref="home"><i class="fa fa-home"></i> Back to Home</a> -->
 
 					<div ng-show="showClientInput" class="cssFade form-group">
-						<label for="selectPop">Click a client location, or enter address:</label>
+						<label for="selectPop">Click map location, or enter address:</label>
 					  <input type="text" class="form-control" placeholder="Client Address" name="client" ng-model="client.address" ng-model-options="{ updateOn: 'change blur' }">
 					</div>
 

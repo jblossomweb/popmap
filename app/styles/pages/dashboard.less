@@ -52,7 +52,7 @@
       overflow-x: hidden;
       overflow-y: auto;
       .jumbotron {
-        background: inherit;
+        background: transparent; /*inherit;*/
         margin-top: 20px;
     }
 }
@@ -94,6 +94,7 @@
         right: -100px;
         top: 180px;
         overflow: hidden;
+        z-index:-1;
     }
 
   .jumbotron {
@@ -204,10 +205,10 @@ div.map {
 
   div.overlay {
     position:absolute;
-    bottom:12%;
+    bottom:8%;
     left:6%;
     width:25%;
-    height:82%;
+    height:90%;
     overflow:hidden;
     background: #000;
     color:#fff;
@@ -215,8 +216,33 @@ div.map {
     .drop-shadow (4px, 4px, 2px, 0, 0.65);
     .border-radius (4px);
 
-    p.terminal{
+    .nav > li > a {
+      padding:.3em;
+      font-size:.6em;
+    }
 
+    .nav > li > a:hover {
+      background:#777;
+      color:#111;
+    }
+
+    .nav > li.active > a,
+    .nav > li.active > a:hover{
+      background:#ddd;
+      color:#111;
+    }
+
+    .tab-scrollbox{
+      position:absolute;
+      bottom:0px;
+      left:0px;
+      width:100%;
+      height:93%;
+      overflow:hidden;
+      /*overflow-y:scroll;*/
+    }
+
+    p.terminal{
       position:absolute;
       bottom:-1.3em;
 
@@ -241,6 +267,47 @@ div.map {
       }
       
     }
+  }
+}
+
+@media (max-width: 768px) {
+  div.map {
+    div.overlay{
+      .nav li {
+          display:table-cell !important;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-page {
+    .main {
+      .jumbotron{
+        margin-top: -20px;
+        h1 {
+          display:none;
+          font-size:26px;
+        }
+      }
+    }
+  }
+  div.map {
+    div.overlay {
+      top: 2%;
+      left: 2%;
+      width: 34%;
+      height: 95%;
+      font-size: .8em;
+    }
+  }
+  .btn-lg{
+    padding: 6px 8px;
+    font-size: 12px;
+    line-height: 1;
+  }
+  .fr h2 small{
+    display:none;
   }
 }
 
