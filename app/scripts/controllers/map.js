@@ -13,11 +13,9 @@ angular.module('popmap').controller('MapCtrl', [
   '$timeout',
   '$window',
   'pops',
+  'geocoder',
   'maptabs',
-  function($scope, $q, $timeout, $window, pops, maptabs) {
-    
-    var geocoder = new google.maps.Geocoder()
-
+  function($scope, $q, $timeout, $window, pops, geocoder, maptabs) {
     $scope.pops = pops.getPops()
     $scope.connections = pops.getConnections()
     $scope.maptabs = maptabs.getTabs()
@@ -30,9 +28,7 @@ angular.module('popmap').controller('MapCtrl', [
 
     $scope.defaultColor = 'e6595d'
 
-    // safety limit for recursion loop
-    $scope.retry = 0
-    $scope.retryLimit = 10
+    
 
     // hacky but necessary
     if($window.innerWidth > 480){
@@ -155,38 +151,9 @@ angular.module('popmap').controller('MapCtrl', [
           resolve(location.address)
         } else {
           // reverse geocode the location 
-          geocoder.geocode({'location': location}, function(results, status) {
-            if(status === 'OVER_QUERY_LIMIT'){
-              if($scope.retry < $scope.retryLimit){
-                // pause and try again recursively
-                console.log('api query limit. taking a nap.')
-                $timeout(function(){
-                  $scope.retry++
-                  resolve($scope.getLocationAddress(location))
-                },1200)
-              } else {
-                console.log('max retry')
-                reject(new Error('over query limit: maximum retry attempts'))
-              }
-            } else if(!results || !results.length){
-              reject(new Error('no results'))
-            } else if (status !== 'OK'){
-              reject(new Error(status))
-            } else {
-              if(results[1]){
-                location.address = results[1].formatted_address
-                location.zip = results[1].address_components[0]
-                location.city = results[1].address_components[1]
-                location.state = results[1].address_components[2]
-              } else {
-                location.address = results[0].formatted_address
-                location.zip = results[0].address_components[0]
-                location.city = results[0].address_components[1]
-                location.state = results[0].address_components[2]
-              }
-              resolve(location.address)
-            }
-          })
+					geocoder.getAddress(location).then(function(address){
+						resolve(address)
+					})
         }
       })
     }
@@ -219,30 +186,9 @@ angular.module('popmap').controller('MapCtrl', [
 
     $scope.getAddressLocation = function(address){
       return $q(function(resolve, reject) {
-        geocoder.geocode( { 'address': address}, function(results, status) {
-          if(status === 'OVER_QUERY_LIMIT'){
-            if($scope.retry < $scope.retryLimit){
-              // pause and try again recursively
-              console.log('api query limit. taking a nap.')
-              $timeout(function(){
-                $scope.retry++
-                resolve($scope.getAddressLocation(address))
-              },1200)
-            } else {
-              console.log('max retry')
-              reject(new Error('over query limit: maximum retry attempts'))
-            }
-          } else if(!results || !results.length){
-            reject(new Error('no results'))
-          } else if (status !== 'OK'){
-            reject(new Error(status))
-          } else {
-            var location = results[0].geometry.location
-            location.address = results[0].formatted_address || address
-            location.asTyped = address
-            resolve(location)
-          }
-        })
+				geocoder.getLocation(address).then(function(location){
+					resolve(location)
+				})
       })
     }
 
