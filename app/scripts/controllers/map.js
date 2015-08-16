@@ -322,7 +322,8 @@ angular.module('popmap').controller('MapCtrl', [
 		                $scope.server.id = id
 
 		                return $scope.routeDestination($scope.closestPop,$scope.server).then(function(route){
-		                  return $scope.connectRoute(route).then(function(){
+		                  return $scope.connectRoute(route).then(function(totalMiles){
+		                  	$scope.totalMiles = Math.round(totalMiles)
 		                  	return true
 		                  })
 		                })
@@ -378,36 +379,52 @@ angular.module('popmap').controller('MapCtrl', [
 
       angular.forEach(route, function(popId, i) {
       	promise = promise.then(function(){
-            return $q(function(resolve) {
-            	if(i > 0){
+          return $q(function(resolve) {
+          	if(i > 0){
 
-            		var start = $scope.pops[prev].location
-            		start.id = prev
+          		var start = $scope.pops[prev].location
+          		start.id = prev
 
-            		var finish = $scope.pops[popId].location
-            		finish.id = popId
+          		var finish = $scope.pops[popId].location
+          		finish.id = popId
 
-            		return $timeout(function(){
-				          return $scope.drawLine(start,finish,$scope.routeLineOpts).then(function(line){
-				          	line.start = start
-				          	line.finish = finish
-				          	line.displayMiles = Math.round(line.distance.miles)
+          		return $timeout(function(){
+			          return $scope.drawLine(start,finish,$scope.routeLineOpts).then(function(line){
+			          	line.start = start
+			          	line.finish = finish
+			          	line.displayMiles = Math.round(line.distance.miles)
 
-				          	$scope.pathLines.push(line)
-				            prev = popId
-				            resolve()
-				          })
-				        },250)
-            	} else {
-            		prev = popId
-            		resolve()
-            	}
-            })
+			          	$scope.pathLines.push(line)
+			            prev = popId
+			            resolve()
+			          })
+			        },250)
+          	} else {
+          		prev = popId
+          		resolve()
+          	}
+          })
         })
       })
       return promise.then(function(){
         $scope.pathLines[0].displayMiles = Math.round($scope.pathLines[0].distance.miles)
-        return true
+        var totalMiles = 0
+        var promise = $q.all(null)
+        angular.forEach($scope.pathLines, function(line) {
+	      	promise = promise.then(function(){
+	          return $q(function(resolve) {
+	          	totalMiles = totalMiles + line.distance.miles
+	          	resolve()
+	          })
+	        })
+	      })
+
+        return promise.then(function(){
+        	return $q(function(resolve) {
+        		$scope.totalMiles = totalMiles
+        		resolve(totalMiles)
+        	})
+        })
       })
     }
 

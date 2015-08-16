@@ -22,20 +22,20 @@ angular.module('popmap').service('pops', [function(){
       mia: { short: 'MIA', name: 'Miami', address: '50 Northeast 9th Street, Miami, FL', color: 'f25e18'},
 
       // test
-      bog: { short: 'BOG', name: 'Bogota', address: 'Bogota, Colombia', color: 'ffbc01'},
-      rio: { short: 'RIO', name: 'Rio de Janeiro', address: 'Rio de Janeiro, Brazil', color: '009b3a'},
-      ba: { short: 'BA', name: 'Buenos Aires', address: 'Buenos Aires, Argentina', color: '4ab9e6'},
+      // bog: { short: 'BOG', name: 'Bogota', address: 'Bogota, Colombia', color: 'ffbc01'},
+      // rio: { short: 'RIO', name: 'Rio de Janeiro', address: 'Rio de Janeiro, Brazil', color: '009b3a'},
+      // ba: { short: 'BA', name: 'Buenos Aires', address: 'Buenos Aires, Argentina', color: '4ab9e6'},
 
 
-      tok: { short: 'TOK', name: 'Tokyo', address: 'Tokyo, Japan', color: 'ffffff'},
-      sha: { short: 'SHA', name: 'Shanghai', address: 'Shanghai, China', color: 'd50d0d'},
-      mos: { short: 'MOS', name: 'Moscow', address: 'Moscow, Russia', color: 'd50d0d'},
-      ber: { short: 'BER', name: 'Berlin', address: 'Berlin, Germany', color: '231f20'},
-      par: { short: 'PAR', name: 'Paris', address: 'Paris, France', color: '0972b4'},
-      rom: { short: 'ROM', name: 'Rome', address: 'Rome, Italy', color: '009b3a'},
-      lon: { short: 'LON', name: 'London', address: 'London, England', color: 'cccccc'},
+      // tok: { short: 'TOK', name: 'Tokyo', address: 'Tokyo, Japan', color: 'ffffff'},
+      // sha: { short: 'SHA', name: 'Shanghai', address: 'Shanghai, China', color: 'd50d0d'},
+      // mos: { short: 'MOS', name: 'Moscow', address: 'Moscow, Russia', color: 'd50d0d'},
+      // ber: { short: 'BER', name: 'Berlin', address: 'Berlin, Germany', color: '231f20'},
+      // par: { short: 'PAR', name: 'Paris', address: 'Paris, France', color: '0972b4'},
+      // rom: { short: 'ROM', name: 'Rome', address: 'Rome, Italy', color: '009b3a'},
+      // lon: { short: 'LON', name: 'London', address: 'London, England', color: 'cccccc'},
 
-      ice: { short: 'ICE', name: 'Iceland', address: 'Reykjavík, Iceland', color: 'ffffff'},
+      // ice: { short: 'ICE', name: 'Iceland', address: 'Reykjavík, Iceland', color: 'ffffff'},
       
 
     }
@@ -88,56 +88,56 @@ angular.module('popmap').service('pops', [function(){
       },
 
       // test
-      'mia-bog': {
-        start: pops.mia,
-        finish: pops.bog
-      },
-      'bog-rio': {
-        start: pops.bog,
-        finish: pops.rio
-      },
-      'rio-ba': {
-        start: pops.rio,
-        finish: pops.ba
-      },
+      // 'mia-bog': {
+      //   start: pops.mia,
+      //   finish: pops.bog
+      // },
+      // 'bog-rio': {
+      //   start: pops.bog,
+      //   finish: pops.rio
+      // },
+      // 'rio-ba': {
+      //   start: pops.rio,
+      //   finish: pops.ba
+      // },
 
-      'ny-ice': {
-        start: pops.ny,
-        finish: pops.ice
-      },
+      // 'ny-ice': {
+      //   start: pops.ny,
+      //   finish: pops.ice
+      // },
 
-      'ice-lon': {
-        start: pops.ice,
-        finish: pops.lon
-      },
-      'lon-par': {
-        start: pops.lon,
-        finish: pops.par
-      },
-      'par-rom': {
-        start: pops.par,
-        finish: pops.rom
-      },
-      'par-ber': {
-        start: pops.par,
-        finish: pops.ber
-      },
-      'ber-mos': {
-        start: pops.ber,
-        finish: pops.mos
-      },
-      'mos-sha': {
-        start: pops.mos,
-        finish: pops.sha
-      },
-      'sha-tok': {
-        start: pops.sha,
-        finish: pops.tok
-      },
-      'tok-sea': {
-        start: pops.tok,
-        finish: pops.sea
-      },
+      // 'ice-lon': {
+      //   start: pops.ice,
+      //   finish: pops.lon
+      // },
+      // 'lon-par': {
+      //   start: pops.lon,
+      //   finish: pops.par
+      // },
+      // 'par-rom': {
+      //   start: pops.par,
+      //   finish: pops.rom
+      // },
+      // 'par-ber': {
+      //   start: pops.par,
+      //   finish: pops.ber
+      // },
+      // 'ber-mos': {
+      //   start: pops.ber,
+      //   finish: pops.mos
+      // },
+      // 'mos-sha': {
+      //   start: pops.mos,
+      //   finish: pops.sha
+      // },
+      // 'sha-tok': {
+      //   start: pops.sha,
+      //   finish: pops.tok
+      // },
+      // 'tok-sea': {
+      //   start: pops.tok,
+      //   finish: pops.sea
+      // },
     }
     return this.connections
   }
