@@ -16,12 +16,34 @@
 		</div>
 		<span class="glyphicon glyphicon-dashboard bg-fade"></span>
 		<div class="jumbotron">
-			<div class="container">
-				<h1>POP Editor</h1>
-				<p>put CRUD controller here</p>
-				<p>
-					<a class="btn btn-primary btn-lg btn-white" ui-sref="home"><i class="fa fa-home"></i> Back to Home</a>
-				</p>
+			<div class="container" ng-controller="EditCtrl">
+				<h1>Editor</h1>
+
+				<div class="col-md-12 edit-tabs">
+					<tabset justified="true">
+			  		<tab heading="POPs">
+							<p class="row-fluid" ng-repeat="(id, pop) in pops">
+								<i class="fa fa-map-marker" style="color:#{{pop.color}}"></i> <a ui-sref="edit/pop/{{id}}">{{pop.name}}</a>
+						  </p>
+						  <hr>
+						  <p class="row-fluid">
+						  	<a class="btn btn-primary btn-lg btn-white" ui-sref="edit/pops/new"><i class="fa fa-plus" style="color:green"></i> Add POP</a>
+						  </p>
+				    </tab>
+				    <tab heading="Connections">
+							<p class="row-fluid" ng-repeat="(id, connection) in connections">
+								<i class="fa fa-map-marker" style="color:#{{connection.start.color}}"></i> 
+								<i class="fa fa-bolt fa-rotate-270" style="color:yellow;margin:0 4px"></i> 
+								<i class="fa fa-map-marker" style="color:#{{connection.finish.color}}"></i> 
+								<a ui-sref="edit/connection/{{id}}">{{connection.start.name}} - {{connection.finish.name}}</a>
+						  </p>
+						  <hr>
+						  <p class="row-fluid">
+						  	<a class="btn btn-primary btn-lg btn-white" ui-sref="edit/cpnnections/new"><i class="fa fa-plus" style="color:green"></i> Add Connection</a>
+						  </p>
+				    </tab>
+				  </tabset>
+			  </div>
 			</div>
 		</div>
 	</snap-content>	
