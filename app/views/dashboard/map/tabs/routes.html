@@ -4,9 +4,15 @@
 <span class="cssFade" ng-show="client.location.address">
 	<a style="color:#e6595d">Client:</a><br>{{client.location.address}}
 </span>
+
+<!-- <span class="cssFade" ng-show="client.location.address">
+	<a style="color:#e6595d">Client:</a><br>{{client.location.address}}
+</span> -->
+
 <span ng-repeat="connection in routeConnections" class="cssFade">
 		<a style="color:#{{connection.start.color}}">{{smallScreen ? connection.start.short : connection.start.name}}</a> - <a style="color:#{{connection.finish.color}}">{{smallScreen ? connection.finish.short : connection.finish.name}}</a> ({{connection.displayMiles}} mi.)
 </span>
+
 <span class="cssFade" ng-show="server.location.address">
-	<a style="color:#{{server.color}}">Server:</a><br>{{server.location.address}}
+	<a style="color:#{{server.color}}">Destination:</a><br>{{server.location.address}}
 </span>
