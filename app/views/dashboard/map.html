@@ -50,7 +50,7 @@
 
 					<div ng-show="showServerInput" class="cssFade form-group">
 						<label for="selectPop">Click a destination POP, or select from dropdown: <a ng-click="initForm()">(cancel)</a></label>
-					  <select class="form-control" name="server" ng-model="serverId" ng-model-options="{ updateOn: 'change blur' }">
+					  <select class="form-control" name="server" ng-model="serverId" ng-model-options="{ updateOn: 'change blur' }" ng-change="setServer(serverId)">
 					    <option ng-repeat="pop in pops" ng-selected="serverId == pop.id" ng-value="pop.id">{{pop.name}}</option>
 					  </select>
 					</div>

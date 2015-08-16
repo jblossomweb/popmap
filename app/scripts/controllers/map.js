@@ -318,20 +318,21 @@ angular.module('popmap').controller('MapCtrl', [
 
               angular.forEach($scope.pops, function(pop, id) {
               	var marker = pop.location.marker
-              	marker.addListener('click', function(event) {
-              		$scope.serverId = id
+              	marker.addListener('click', function() {
               		$scope.setServer(id)
               	})
               })
-
-              // listen for change
-              $scope.unWatchServer = $scope.$watch('serverId',$scope.setServer)
           })
         })
       })
     }
 
     $scope.setServer = function(id){
+    	$scope.serverId = id
+    	
+	    $scope.map.setZoom($scope.originalZoom)
+      $scope.map.setCenter($scope.originalCenter)
+    	
     	$scope.clearPathLines().then(function(){
     		return $scope.drawLine($scope.client.location,$scope.closestPop.location,$scope.routeLineOpts).then(function(line){
 
