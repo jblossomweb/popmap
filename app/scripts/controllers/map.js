@@ -18,11 +18,17 @@ angular.module('popmap').controller('MapCtrl', [
     
     var geocoder = new google.maps.Geocoder()
 
-    $scope.yes = true
-
     $scope.pops = pops.getPops()
     $scope.connections = pops.getConnections()
     $scope.maptabs = maptabs.getTabs()
+
+    $scope.routeLineOpts = {
+      color: '#e21b24',
+      weight: 4,
+      opacity: 1
+    }
+
+    $scope.defaultColor = 'e6595d'
 
     // safety limit for recursion loop
     $scope.retry = 0
@@ -111,6 +117,9 @@ angular.module('popmap').controller('MapCtrl', [
         angular.forEach($scope.connections, function(connection, id) {
           connection.id = id
 
+          if(!connection.start.connections) connection.start.connections = {}
+          if(!connection.finish.connections) connection.finish.connections = {}
+
           // TODO: modularize callback hell
           promise = promise.then(function(){
             return $q(function(resolve) {
@@ -120,6 +129,8 @@ angular.module('popmap').controller('MapCtrl', [
                     return $scope.drawLine(start,finish).then(function(line){
                       connection.line = line
                       connection.displayMiles = Math.round(line.distance.miles)
+                      connection.start.connections[connection.id] = connection
+                      connection.finish.connections[connection.id] = connection
                       $scope.displayConnections.push(connection)
                       resolve(line)
                     })
@@ -164,8 +175,14 @@ angular.module('popmap').controller('MapCtrl', [
             } else {
               if(results[1]){
                 location.address = results[1].formatted_address
+                location.zip = results[1].address_components[0]
+                location.city = results[1].address_components[1]
+                location.state = results[1].address_components[2]
               } else {
                 location.address = results[0].formatted_address
+                location.zip = results[0].address_components[0]
+                location.city = results[0].address_components[1]
+                location.state = results[0].address_components[2]
               }
               resolve(location.address)
             }
@@ -222,6 +239,7 @@ angular.module('popmap').controller('MapCtrl', [
           } else {
             var location = results[0].geometry.location
             location.address = results[0].formatted_address || address
+            location.asTyped = address
             resolve(location)
           }
         })
@@ -247,7 +265,7 @@ angular.module('popmap').controller('MapCtrl', [
       if(!options) var options = {}
       return $q(function(resolve) {
         var line = new google.maps.Polyline({
-          strokeColor: options.color || '#000000',
+          strokeColor: options.color || '#333333',
           strokeOpacity: options.opacity || 0.7,
           strokeWeight: options.weight || 2,
           map: $scope.map
@@ -324,29 +342,48 @@ angular.module('popmap').controller('MapCtrl', [
         $scope.client.marker = marker
         $scope.map.setZoom($scope.originalZoom + 2)
         $scope.getClosestPop(location).then(function(pop){
-          console.log('Your closest POP is '+pop.name)
           $scope.closestPop = pop
           $scope.pathLines = []
-          $scope.drawLine($scope.client.location,$scope.closestPop.location,{
-            color: '#e21b24',
-            weight: 4
-          }).then(function(line){
+          $scope.drawLine($scope.client.location,$scope.closestPop.location,$scope.routeLineOpts).then(function(line){
+          		
+          		// fudge a fake pop for display purposes
+          		$scope.client.location.pop = {
+          			name: $scope.client.location.city ? $scope.client.location.city.long_name || $scope.client.location.city : $scope.client.location.asTyped,
+          			short: $scope.client.location.city ? $scope.client.location.city.short_name || $scope.client.location.city : $scope.client.location.asTyped,
+          			color: $scope.defaultColor
+          		}
+
+          		line.start = $scope.client.location
+          		line.finish = $scope.closestPop.location
               $scope.pathLines.push(line)
               $scope.clientMarked = true
+
               // default to closest.
-              $scope.server = $scope.closestPop
+              $scope.serverId = $scope.closestPop.id
               
               // listen for change
-              $scope.unWatchServer = $scope.$watch('server.id',function(id){
+              $scope.unWatchServer = $scope.$watch('serverId',function(id){
+
+              	$scope.clearPathLines().then(function(){
+              		return $scope.drawLine($scope.client.location,$scope.closestPop.location,$scope.routeLineOpts).then(function(line){
+
+              			line.start = $scope.client.location
+              			line.finish = $scope.closestPop.location
+
+              			$scope.pathLines.push(line)
+              			$scope.clientMarked = true
+              			$scope.server = $scope.pops[id]
+		                $scope.server.id = id
+
+		                return $scope.routeDestination($scope.closestPop,$scope.server).then(function(route){
+		                  return $scope.connectRoute(route).then(function(){
+		                  	return true
+		                  })
+		                })
+              		})
+              	})
+
                 
-                $scope.server = $scope.pops[id]
-                $scope.server.id = id
-
-                $scope.routeDestination($scope.closestPop,$scope.server).then(function(){
-                  // do something
-
-                  // $scope.unWatchServer()
-                })
               })
           })
         })
@@ -354,23 +391,77 @@ angular.module('popmap').controller('MapCtrl', [
     }
 
     $scope.routeDestination = function(startPop,endPop){
-      // write some code here
       return $q(function(resolve) {
-        
-        console.log($scope.pathLines)
-
+				var g = new Graph()
         var promise = $q.all(null)
-
-        angular.forEach($scope.connections, function(connection, id) {
+        
+        angular.forEach($scope.pops, function(pop, id) {
           promise = promise.then(function(){
             return $q(function(resolve) {
-
+            	var lines = {}
+            	var promise = $q.all(null)
+            	angular.forEach(pop.connections, function(connection, id) {
+            		var lid = null
+            		if(connection.start.id == pop.id) {
+            			lid = connection.finish.id
+            		} else if(connection.finish.id == pop.id) {
+            			lid = connection.start.id
+            		}
+            		lines[lid] = connection.line.distance.miles
+            	})
+            	return promise.then(function(){
+            		g.addVertex(id, lines)
+			          resolve()
+			        })
             })
           })
         })
+        return promise.then(function(){
+        	var route = g.shortestPath(startPop.id, endPop.id).concat([startPop.id]).reverse()
+          resolve(route)
+        })
+      })
+    }
 
+    $scope.connectRoute = function(route) {
 
-        resolve()
+    	var promise = $q.all(null)
+      $scope.pathLines = $scope.pathLines || []
+
+      var prev = route[0]
+
+      angular.forEach(route, function(popId, i) {
+      	promise = promise.then(function(){
+            return $q(function(resolve) {
+            	if(i > 0){
+
+            		var start = $scope.pops[prev].location
+            		start.id = prev
+
+            		var finish = $scope.pops[popId].location
+            		finish.id = popId
+
+            		return $timeout(function(){
+				          return $scope.drawLine(start,finish,$scope.routeLineOpts).then(function(line){
+				          	line.start = start
+				          	line.finish = finish
+				          	line.displayMiles = Math.round(line.distance.miles)
+
+				          	$scope.pathLines.push(line)
+				            prev = popId
+				            resolve()
+				          })
+				        },250)
+            	} else {
+            		prev = popId
+            		resolve()
+            	}
+            })
+        })
+      })
+      return promise.then(function(){
+        $scope.pathLines[0].displayMiles = Math.round($scope.pathLines[0].distance.miles)
+        return true
       })
     }
 
@@ -398,6 +489,9 @@ angular.module('popmap').controller('MapCtrl', [
       }
       $scope.client = {}
       $scope.server = {}
+      delete $scope.serverId
+      delete $scope.closestPop
+
       $scope.showClientInput = true
       $scope.showServerInput = false
 

@@ -1,18 +1,23 @@
 <span ng-if="markersConnected && !client.location.address" ng-hide="client.location.address">Choose client address</span>
 <span class="cursor" ng-hide="client.location.address">_</span>
 
-<span class="cssFade" ng-show="client.location.address">
-	<a style="color:#e6595d">Client:</a><br>{{client.location.address}}
+<span ng-show="client.location.address">
+	<a style="color:#{{defaultColor}}">Client:</a><br>{{client.location.address}}
 </span>
 
-<!-- <span class="cssFade" ng-show="client.location.address">
-	<a style="color:#e6595d">Client:</a><br>{{client.location.address}}
-</span> -->
+<span></span>
 
-<span ng-repeat="connection in routeConnections" class="cssFade">
-		<a style="color:#{{connection.start.color}}">{{smallScreen ? connection.start.short : connection.start.name}}</a> - <a style="color:#{{connection.finish.color}}">{{smallScreen ? connection.finish.short : connection.finish.name}}</a> ({{connection.displayMiles}} mi.)
+<!-- <span ng-show="pathLines.length">
+	<a style="color:#{{defaultColor}}">Paths:</a>
+</span>
+ -->
+<span ng-repeat="line in pathLines">
+		<a style="color:#{{defaultColor}}">Path:</a><br>
+		<a style="color:#{{line.start.pop.color}}">{{smallScreen ? line.start.pop.short : line.start.pop.name}}</a> - <a style="color:#{{line.finish.pop.color}}">{{smallScreen ? line.finish.pop.short : line.finish.pop.name}}</a> ({{line.displayMiles}} mi.)
 </span>
 
-<span class="cssFade" ng-show="server.location.address">
+<span></span>
+
+<span ng-show="server.location.address">
 	<a style="color:#{{server.color}}">Destination:</a><br>{{server.location.address}}
 </span>

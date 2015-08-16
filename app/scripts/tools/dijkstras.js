@@ -31,7 +31,7 @@ Graph = function(){
   this.addVertex = function(name, edges){
     this.vertices[name] = edges
   }
-
+  
   this.shortestPath = function (start, finish) {
     var nodes = new PriorityQueue(),
         distances = {},
