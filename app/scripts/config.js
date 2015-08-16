@@ -40,9 +40,9 @@ angular.module('popmap').config(function($stateProvider, $urlRouterProvider) {
         parent: 'dashboard',
         templateUrl: 'views/dashboard/map.html'
     })
-    .state('reports', {
-        url: '/reports',
+    .state('edit', {
+        url: '/edit',
         parent: 'dashboard',
-        templateUrl: 'views/dashboard/reports.html'
+        templateUrl: 'views/dashboard/edit.html'
     })
 })
