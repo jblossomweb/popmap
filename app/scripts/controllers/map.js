@@ -314,11 +314,12 @@ angular.module('popmap').controller('MapCtrl', [
               $scope.clientMarked = true
 
               // default to closest.
-              $scope.serverId = $scope.closestPop.id
+              $scope.setServer($scope.closestPop.id)
 
+              $scope.popListeners = {}
               angular.forEach($scope.pops, function(pop, id) {
               	var marker = pop.location.marker
-              	marker.addListener('click', function() {
+              	$scope.popListeners[id] = marker.addListener('click', function() {
               		$scope.setServer(id)
               	})
               })
@@ -464,8 +465,10 @@ angular.module('popmap').controller('MapCtrl', [
       if($scope.unWatchClient){
         $scope.unWatchClient()
       }
-      if($scope.unWatchServer){
-        $scope.unWatchServer()
+      if($scope.popListeners){
+        angular.forEach($scope.popListeners, function(listener) {
+          google.maps.event.removeListener(listener)
+        })
       }
       $scope.client = {}
       $scope.server = {}
