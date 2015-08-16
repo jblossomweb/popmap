@@ -28,8 +28,6 @@ angular.module('popmap').controller('MapCtrl', [
 
     $scope.defaultColor = 'e6595d'
 
-    
-
     // hacky but necessary
     if($window.innerWidth > 480){
       $scope.mapZoom = 3
@@ -42,7 +40,13 @@ angular.module('popmap').controller('MapCtrl', [
     $scope.$watch('map',function(map){
       $scope.originalCenter = map.getCenter()
       $scope.originalZoom = map.getZoom()
+
+      // map click listener
+      $scope.addMarkerListener = google.maps.event.addListener($scope.map, 'click', function(event){
+        $scope.addMarkers()
+      })
     })
+    
 
     $scope.toggleBounce = function() {
       if (this.getAnimation() != null) {
@@ -55,7 +59,7 @@ angular.module('popmap').controller('MapCtrl', [
     $scope.addMarkers = function() {
       if(!$scope.markersDrop){
         $scope.markersDrop = true
-
+        google.maps.event.removeListener($scope.addMarkerListener)
         var promise = $q.all(null)
 
         $scope.displayLocations = []
@@ -85,8 +89,11 @@ angular.module('popmap').controller('MapCtrl', [
         promise.then(function(){
           return $timeout(function(){
             $scope.markersDropped = true
-            // $scope.connectMarkers()
             $scope.showConnectButton = true
+            // map click listener
+				    $scope.connectMarkersListener = google.maps.event.addListener($scope.map, 'click', function(event){
+				      $scope.connectMarkers()
+				    })
           // },1250)
            },500)
           
@@ -105,6 +112,8 @@ angular.module('popmap').controller('MapCtrl', [
 
       if($scope.markersDropped && !$scope.markersConnect){
         $scope.markersConnect = true
+
+        google.maps.event.removeListener($scope.connectMarkerListener)
 
         var promise = $q.all(null)
 
