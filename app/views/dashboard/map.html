@@ -43,12 +43,12 @@
 
 					<!-- <a class="btn btn-primary btn-lg btn-white" ui-sref="home"><i class="fa fa-home"></i> Back to Home</a> -->
 
-					<div ng-show="showClientInput" class="cssFade form-group">
+					<div ng-show="showClientInput" class="form-group">
 						<label for="selectPop">Click map location, or enter address:</label>
 					  <input type="text" class="form-control" placeholder="Client Address" name="client" ng-model="client.address" ng-model-options="{ updateOn: 'change blur' }">
 					</div>
 
-					<div ng-show="showServerInput" class="cssFade form-group">
+					<div ng-show="showServerInput" class="form-group">
 						<label for="selectPop">Click a destination POP, or select from dropdown: <a ng-click="initForm()">(cancel)</a></label>
 					  <select class="form-control" name="server" ng-model="serverId" ng-model-options="{ updateOn: 'change blur' }" ng-change="setServer(serverId)">
 					    <option ng-repeat="pop in pops" ng-selected="serverId == pop.id" ng-value="pop.id">{{pop.name}}</option>
