@@ -315,35 +315,42 @@ angular.module('popmap').controller('MapCtrl', [
 
               // default to closest.
               $scope.serverId = $scope.closestPop.id
-              
-              // listen for change
-              $scope.unWatchServer = $scope.$watch('serverId',function(id){
 
-              	$scope.clearPathLines().then(function(){
-              		return $scope.drawLine($scope.client.location,$scope.closestPop.location,$scope.routeLineOpts).then(function(line){
-
-              			line.start = $scope.client.location
-              			line.finish = $scope.closestPop.location
-
-              			$scope.pathLines.push(line)
-              			$scope.clientMarked = true
-              			$scope.server = $scope.pops[id]
-		                $scope.server.id = id
-
-		                return $scope.routeDestination($scope.closestPop,$scope.server).then(function(route){
-		                  return $scope.connectRoute(route).then(function(totalMiles){
-		                  	$scope.totalMiles = Math.round(totalMiles)
-		                  	return true
-		                  })
-		                })
-              		})
+              angular.forEach($scope.pops, function(pop, id) {
+              	var marker = pop.location.marker
+              	marker.addListener('click', function(event) {
+              		$scope.serverId = id
+              		$scope.setServer(id)
               	})
-
-                
               })
+
+              // listen for change
+              $scope.unWatchServer = $scope.$watch('serverId',$scope.setServer)
           })
         })
       })
+    }
+
+    $scope.setServer = function(id){
+    	$scope.clearPathLines().then(function(){
+    		return $scope.drawLine($scope.client.location,$scope.closestPop.location,$scope.routeLineOpts).then(function(line){
+
+    			line.start = $scope.client.location
+    			line.finish = $scope.closestPop.location
+
+    			$scope.pathLines.push(line)
+    			$scope.clientMarked = true
+    			$scope.server = $scope.pops[id]
+          $scope.server.id = id
+
+          return $scope.routeDestination($scope.closestPop,$scope.server).then(function(route){
+            return $scope.connectRoute(route).then(function(totalMiles){
+            	$scope.totalMiles = Math.round(totalMiles)
+            	return true
+            })
+          })
+    		})
+    	})
     }
 
     $scope.routeDestination = function(startPop,endPop){
