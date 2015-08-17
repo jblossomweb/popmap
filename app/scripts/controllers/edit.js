@@ -34,9 +34,10 @@ angular.module('popmap').controller('EditPopCtrl', [
   '$scope',
   '$stateParams',
   '$timeout',
+  '$location',
   'pops',
   'geocoder',
-  function($scope, $stateParams, $timeout, pops, geocoder) {
+  function($scope, $stateParams, $timeout, $location, pops, geocoder) {
 
   	$scope.id = $stateParams.id
 
@@ -66,12 +67,24 @@ angular.module('popmap').controller('EditPopCtrl', [
     	$scope.pop.id = $scope.id
     	pops.savePop($scope.id,$scope.pop).then(function(pop){
     		$scope.centerToAddress()
-    		console.log('saved '+$scope.id)
+    		// console.log('saved '+$scope.id)
     		$scope.consoleMsg = 'saved!'
     		$timeout(function(){
     			$scope.consoleMsg = null
     		}, 3000)
     	})
+    }
+
+    $scope.deletePop = function(){
+    	if($scope.id){
+    		pops.deletePop($scope.id).then(function(){
+    			$scope.consoleMsg = 'deleted!'
+	    		$timeout(function(){
+	    			$scope.consoleMsg = null
+	    		}, 3000)
+	    		$location.path('dashboard/edit')
+    		})
+    	}
     }
 
     // trim hash from hex codes
@@ -126,16 +139,25 @@ angular.module('popmap').controller('EditConnectionCtrl', [
     		$scope.id = $scope.startId + '-' + $scope.finishId
     	}
 
-    	// console.log($scope)
-
     	pops.saveConnection($scope.id,$scope.startId,$scope.finishId).then(function(connection){
-    		console.log('saved')
     		$scope.consoleMsg = 'saved!'
     		$timeout(function(){
     			$scope.consoleMsg = null
     		}, 3000)
     		$location.path('dashboard/edit/connection/'+connection[0]+'-'+connection[1])
     	})
+    }
+
+    $scope.deleteConnection = function(){
+    	if($scope.id){
+    		pops.deleteConnection($scope.id).then(function(){
+    			$scope.consoleMsg = 'deleted!'
+	    		$timeout(function(){
+	    			$scope.consoleMsg = null
+	    		}, 3000)
+	    		$location.path('dashboard/edit')
+    		})
+    	}
     }
   }
 ])

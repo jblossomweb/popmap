@@ -69,8 +69,28 @@ angular.module('popmap').service('pops', ['$q',function($q){
     // fake api
     return $q(function(resolve, reject) {
       if(api.pops[id]){
-        delete api.pops[id]
-        resolve()
+
+        // 'cascade'
+        var promise = $q.all(null)
+        promise = promise.then(function(){
+          angular.forEach(api.connections, function(connection, cid) {
+            promise = promise.then(function(){
+              return $q(function(next) {
+                if(connection && connection.indexOf(id) > -1){
+                  api.deleteConnection(cid).then(next)
+                } else {
+                  next()
+                }
+              })
+            })
+          })
+        })
+        
+        return promise.then(function(){
+          // now delete the pop
+          delete api.pops[id]
+          resolve()
+        })
       } else {
         reject()
       }
@@ -103,12 +123,9 @@ angular.module('popmap').service('pops', ['$q',function($q){
   }
 
   this.saveConnection = function(id,start,finish){
-    console.log(start)
-    console.log(finish)
     // fake api
     return $q(function(resolve, reject) {
       if(id){
-        // delete api.connections[id] // effectively change ids
         api.deleteConnection(id).then(function(){
           api.connections[start+'-'+finish] = [start,finish]
           resolve(api.connections[start+'-'+finish])
@@ -133,11 +150,8 @@ angular.module('popmap').service('pops', ['$q',function($q){
 
   var normalizeConnections = function(connections){
     if(!connections) {
-      console.log('not passed. getting api.connections')
       var connections = api.connections
     }
-    
-    // console.log(connections)
 
     var normalized = {}
     return api.getPops().then(function(pops){
@@ -146,12 +160,9 @@ angular.module('popmap').service('pops', ['$q',function($q){
         
         promise = promise.then(function(){
           return $q(function(resolve,reject) {
-
             if(!pops[connection[0]] || !pops[connection[1]]){
-              console.log('CAUGHT ERROR')
-              // console.log(pops)
-              console.log(connection)
-              reject()
+              // console.log('CAUGHT ERROR')
+              resolve()
             } else {
               pops[connection[0]].id = connection[0]
               pops[connection[1]].id = connection[1]
@@ -163,8 +174,6 @@ angular.module('popmap').service('pops', ['$q',function($q){
               }
               resolve()
             }
-
-            
           })
         })
 

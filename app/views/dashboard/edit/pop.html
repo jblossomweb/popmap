@@ -18,7 +18,7 @@
 		<div class="jumbotron">
 			<div class="container" ng-controller="EditPopCtrl">
 				<h1 ng-if="id">
-					<i class="fa fa-map-marker" style="color:#{{pop.color}};cursor:pointer;" colorpicker ng-model="pop.color"></i> {{pop.name}}
+					<i class="fa fa-map-marker" style="color:#{{pop.color}};cursor:pointer;" colorpicker ng-model="pop.color"></i> {{pop.name}} <a class="btn btn-danger btn-lg btn-white" ng-click="deletePop()">Delete</a>
 				</h1>
 
 				<h1 ng-if="!id">
