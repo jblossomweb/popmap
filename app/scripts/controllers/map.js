@@ -14,8 +14,9 @@ angular.module('popmap').controller('MapCtrl', [
   '$window',
   'pops',
   'geocoder',
+  'dijkstras',
   'maptabs',
-  function($scope, $q, $timeout, $window, pops, geocoder, maptabs) {
+  function($scope, $q, $timeout, $window, pops, geocoder, dijkstras, maptabs) {
     pops.getPops().then(function(p){ $scope.pops = p })
     pops.getConnections().then(function(c){ $scope.connections = c })
     $scope.maptabs = maptabs.getTabs()
@@ -357,7 +358,7 @@ angular.module('popmap').controller('MapCtrl', [
 
     $scope.routeDestination = function(startPop,endPop){
       return $q(function(resolve) {
-				var g = new Graph()
+				var g = new dijkstras()
         var promise = $q.all(null)
         
         angular.forEach($scope.pops, function(pop, id) {
