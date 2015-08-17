@@ -20,7 +20,7 @@
 				<h1 ng-if="id">
 					<i class="fa fa-map-marker" style="color:#{{connection.start.color}}" ng-if="connection.start.color"></i> 
 					<i class="fa fa-bolt fa-rotate-270" style="color:yellow;margin:0 4px" ng-if="connection.start.color && connection.finish.color"></i> 
-					<i class="fa fa-map-marker" style="color:#{{connection.finish.color}}" ng-if="connection.finish.color"></i> {{connection.start.name}} - {{connection.finish.name}} <a class="btn btn-danger btn-lg btn-white" ng-click="deleteConnection()">Delete</a>
+					<i class="fa fa-map-marker" style="color:#{{connection.finish.color}}" ng-if="connection.finish.color"></i> {{connection.start.name}} - {{connection.finish.name}} <a class="btn btn-danger btn-lg btn-white" ng-click="deleteConnection()"><i class="fa fa-times" style="color:red"></i> Delete</a>
 				</h1>
 
 				<h1 ng-if="!id">
@@ -44,9 +44,9 @@
 						  </select>
 
 				    </div>
-				    <a class="btn btn-danger btn-lg btn-white" ui-sref="edit">Go Back</a>
-
-    				<button type="submit" class="btn btn-primary btn-lg btn-white">Save</button>
+				    <a class="btn btn-danger btn-lg btn-white" ui-sref="edit"><i class="fa fa-mail-reply" style="color:darkOrange"></i> Go Back</a>
+    				<button type="submit" class="btn btn-primary btn-lg btn-white"><i class="fa fa-save" style="color:lightGreen"></i> Save</button>
+    				<a class="btn btn-danger btn-lg btn-white btn-mobile-only" ng-click="deletePop()" ng-if="id"><i class="fa fa-times" style="color:red"></i> Delete</a>
     				<a style="margin-left:8px;" ng-show="consoleMsg" class="cssFade">{{consoleMsg}}</a>
 			    </form>
 			  </div>

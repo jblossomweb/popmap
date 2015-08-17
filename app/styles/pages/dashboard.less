@@ -280,6 +280,12 @@ div.map {
   }
 }
 
+@media(min-width: 481px) {
+  .btn-mobile-only{
+    display:none;
+  }
+}
+
 @media (max-width: 480px) {
   .dashboard-page {
     .main {
@@ -292,6 +298,9 @@ div.map {
         p.row-fluid{
           font-size: 12px;
           line-height: 1;
+        }
+        .btn-mobile-only{
+          display:inline-block;
         }
       }
     }

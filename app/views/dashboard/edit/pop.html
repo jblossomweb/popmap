@@ -18,7 +18,7 @@
 		<div class="jumbotron">
 			<div class="container" ng-controller="EditPopCtrl">
 				<h1 ng-if="id">
-					<i class="fa fa-map-marker" style="color:#{{pop.color}};cursor:pointer;" colorpicker ng-model="pop.color"></i> {{pop.name}} <a class="btn btn-danger btn-lg btn-white" ng-click="deletePop()">Delete</a>
+					<i class="fa fa-map-marker" style="color:#{{pop.color}};cursor:pointer;" colorpicker ng-model="pop.color"></i> {{pop.name}} <a class="btn btn-danger btn-lg btn-white" ng-click="deletePop()"><i class="fa fa-times" style="color:red"></i> Delete</a>
 				</h1>
 
 				<h1 ng-if="!id">
@@ -49,14 +49,16 @@
 				      ng-model="pop.address"></input>
 				    </div>
 				    <div class="form-group">
-				    	<label>Color</label>
+				    	<label>Color</label> <i class="fa fa-paint-brush" style="color:#{{pop.color}}"></i>
 				      <input colorpicker colorpicker-selected="trimHex()" type="text"
 				      class="form-control"
 				      placeholder="Color"
+				      style="cursor:pointer;border-color:#{{pop.color}}" 
 				      ng-model="pop.color"></input>
 				    </div>
-				    <a class="btn btn-danger btn-lg btn-white" ui-sref="edit">Go Back</a>
-    				<button type="submit" class="btn btn-primary btn-lg btn-white">Save</button>
+				    <a class="btn btn-danger btn-lg btn-white" ui-sref="edit"><i class="fa fa-mail-reply" style="color:darkOrange"></i> Go Back</a>
+    				<button type="submit" class="btn btn-primary btn-lg btn-white"><i class="fa fa-save" style="color:lightGreen"></i> Save</button>
+    				<a class="btn btn-danger btn-lg btn-white btn-mobile-only" ng-click="deletePop()" ng-if="id"><i class="fa fa-times" style="color:red"></i> Delete</a>
     				<a style="margin-left:8px;" ng-show="consoleMsg" class="cssFade">{{consoleMsg}}</a>
 			    </form>
 			  </div>
