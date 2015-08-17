@@ -16,8 +16,8 @@ angular.module('popmap').controller('MapCtrl', [
   'geocoder',
   'maptabs',
   function($scope, $q, $timeout, $window, pops, geocoder, maptabs) {
-    $scope.pops = pops.getPops()
-    $scope.connections = pops.getConnections()
+    pops.getPops().then(function(p){ $scope.pops = p })
+    pops.getConnections().then(function(c){ $scope.connections = c })
     $scope.maptabs = maptabs.getTabs()
 
     $scope.routeLineOpts = {

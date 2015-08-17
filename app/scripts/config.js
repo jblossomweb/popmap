@@ -45,4 +45,15 @@ angular.module('popmap').config(function($stateProvider, $urlRouterProvider) {
         parent: 'dashboard',
         templateUrl: 'views/dashboard/edit.html'
     })
+    .state('editpop', {
+        url: '/edit/pop/{id}',
+        parent: 'dashboard',
+        templateUrl: 'views/dashboard/edit/pop.html'
+    })
+    .state('newpop', {
+        url: '/edit/pops/new',
+        parent: 'dashboard',
+        templateUrl: 'views/dashboard/edit/pop.html'
+    })
+
 })

@@ -23,11 +23,11 @@
 					<tabset justified="true">
 			  		<tab heading="POPs">
 							<p class="row-fluid" ng-repeat="(id, pop) in pops">
-								<i class="fa fa-map-marker" style="color:#{{pop.color}}"></i> <a ui-sref="edit/pop/{{id}}">{{pop.name}}</a>
+								<i class="fa fa-map-marker" style="color:#{{pop.color}}"></i> <a href="#/dashboard/edit/pop/{{id}}">{{pop.name}}</a>
 						  </p>
 						  <hr>
 						  <p class="row-fluid">
-						  	<a class="btn btn-primary btn-lg btn-white" ui-sref="edit/pops/new"><i class="fa fa-plus" style="color:green"></i> Add POP</a>
+						  	<a class="btn btn-primary btn-lg btn-white" ui-sref="newpop"><i class="fa fa-plus" style="color:green"></i> Add POP</a>
 						  </p>
 				    </tab>
 				    <tab heading="Connections">
@@ -39,7 +39,7 @@
 						  </p>
 						  <hr>
 						  <p class="row-fluid">
-						  	<a class="btn btn-primary btn-lg btn-white" ui-sref="edit/cpnnections/new"><i class="fa fa-plus" style="color:green"></i> Add Connection</a>
+						  	<a class="btn btn-primary btn-lg btn-white" ui-sref="edit/connections/new"><i class="fa fa-plus" style="color:green"></i> Add Connection</a>
 						  </p>
 				    </tab>
 				  </tabset>

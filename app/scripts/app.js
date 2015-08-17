@@ -13,5 +13,6 @@ var app = angular.module('popmap', [
   'snap',
   'ngAnimate',
   'ngMap',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'colorpicker.module'
 ])

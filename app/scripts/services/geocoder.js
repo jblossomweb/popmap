@@ -27,6 +27,10 @@ angular.module('popmap').service('geocoder', ['$q', '$timeout', function($q,$tim
         location.state = results[0].address_components[2]
         resolve(location)
       })
+    },function(){
+      return $q(function(resolve, reject) {
+        reject()
+      })
     })
   }
 
