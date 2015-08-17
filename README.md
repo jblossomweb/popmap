@@ -2,7 +2,12 @@
 
 A take home test for [Highwinds](http://www.highwinds.com/).
 
-## [Demo]()
+## [Demo (coming soon)]()
+
+## Under Construction
+
+See Trello board [here](https://trello.com/b/XmWf4di8/popmap)
+
 
 ## Summary
 
