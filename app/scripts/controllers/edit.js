@@ -33,11 +33,14 @@ angular.module('popmap').controller('EditCtrl', [
 angular.module('popmap').controller('EditPopCtrl', [
   '$scope',
   '$stateParams',
+  '$timeout',
   'pops',
   'geocoder',
-  function($scope, $stateParams, pops, geocoder) {
+  function($scope, $stateParams, $timeout, pops, geocoder) {
 
   	$scope.id = $stateParams.id
+
+  	$scope.consoleMsg = null
 
   	pops.getPop($stateParams.id).then(function(pop){
     	$scope.pop = pop
@@ -49,7 +52,6 @@ angular.module('popmap').controller('EditPopCtrl', [
   	$scope.centerToAddress = function() {
     	if($scope.pop && $scope.pop.address && $scope.map){
     		geocoder.getLocation($scope.pop.address).then(function(location){
-    			// console.log('center map to '+$scope.pop.name)
     			$scope.map.setCenter(location)
     		})
     	}
@@ -61,8 +63,14 @@ angular.module('popmap').controller('EditPopCtrl', [
     		// add new
     		$scope.id = $scope.pop.short.toLowerCase().replace(/ /g, "-")
     	}
+    	$scope.pop.id = $scope.id
     	pops.savePop($scope.id,$scope.pop).then(function(pop){
-    		// console.log('saved '+$scope.id)
+    		$scope.centerToAddress()
+    		console.log('saved '+$scope.id)
+    		$scope.consoleMsg = 'saved!'
+    		$timeout(function(){
+    			$scope.consoleMsg = null
+    		}, 3000)
     	})
     }
 
@@ -77,5 +85,57 @@ angular.module('popmap').controller('EditPopCtrl', [
     $scope.$watch('map',function(map){ if(!$scope.map) $scope.map = map })
 
 
+  }
+])
+
+
+/**
+ * @ngdoc function
+ * @name popmap.controller:EditConnectionCtrl
+ * @description
+ * # EditConnectionCtrl
+ * Controller of popmap
+ */
+angular.module('popmap').controller('EditConnectionCtrl', [
+  '$scope',
+  '$stateParams',
+  '$timeout',
+  '$location',
+  'pops',
+  function($scope, $stateParams, $timeout, $location, pops) {
+
+  	$scope.id = $stateParams.id
+
+  	$scope.refresh = function(){
+  		pops.getPops().then(function(p){ 
+	  		$scope.pops = p 
+		  	pops.getConnection($scope.id).then(function(connection){
+		    	$scope.connection = connection
+		    	$scope.startId = connection.start.id
+		    	$scope.finishId = connection.finish.id
+		  	})
+		  })
+  	}
+
+  	$scope.refresh()
+
+    $scope.saveConnection = function(){
+    	// talk to the service
+    	if(!$scope.id){
+    		// add new
+    		$scope.id = $scope.startId + '-' + $scope.finishId
+    	}
+
+    	// console.log($scope)
+
+    	pops.saveConnection($scope.id,$scope.startId,$scope.finishId).then(function(connection){
+    		console.log('saved')
+    		$scope.consoleMsg = 'saved!'
+    		$timeout(function(){
+    			$scope.consoleMsg = null
+    		}, 3000)
+    		$location.path('dashboard/edit/connection/'+connection[0]+'-'+connection[1])
+    	})
+    }
   }
 ])

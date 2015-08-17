@@ -55,5 +55,15 @@ angular.module('popmap').config(function($stateProvider, $urlRouterProvider) {
         parent: 'dashboard',
         templateUrl: 'views/dashboard/edit/pop.html'
     })
+    .state('editconnection', {
+        url: '/edit/connection/{id}',
+        parent: 'dashboard',
+        templateUrl: 'views/dashboard/edit/connection.html'
+    })
+    .state('newconnection', {
+        url: '/edit/connections/new',
+        parent: 'dashboard',
+        templateUrl: 'views/dashboard/edit/connection.html'
+    })
 
 })

@@ -86,21 +86,88 @@ angular.module('popmap').service('pops', ['$q',function($q){
     })
   }
 
+  this.getConnection = function(id){
+    // fake api
+    return $q(function(resolve, reject) {
+      if(api.connections[id]){
+        var connections = {}
+        connections[id] = api.connections[id]
+
+        return normalizeConnections(connections).then(function(normalized){
+          resolve(normalized[id])
+        })
+      } else {
+        reject()
+      }
+    })
+  }
+
+  this.saveConnection = function(id,start,finish){
+    console.log(start)
+    console.log(finish)
+    // fake api
+    return $q(function(resolve, reject) {
+      if(id){
+        // delete api.connections[id] // effectively change ids
+        api.deleteConnection(id).then(function(){
+          api.connections[start+'-'+finish] = [start,finish]
+          resolve(api.connections[start+'-'+finish])
+        })
+      } else {
+        reject()
+      }
+    })
+  }
+
+  this.deleteConnection = function(id){
+    // fake api
+    return $q(function(resolve, reject) {
+      if(id){
+        delete api.connections[id]
+        resolve()
+      } else {
+        reject()
+      }
+    })
+  }
+
   var normalizeConnections = function(connections){
-    if(!connections) var connections = api.connections
+    if(!connections) {
+      console.log('not passed. getting api.connections')
+      var connections = api.connections
+    }
+    
+    // console.log(connections)
+
     var normalized = {}
     return api.getPops().then(function(pops){
       var promise = $q.all(null)
       angular.forEach(connections, function(connection, id) {
+        
         promise = promise.then(function(){
-          return $q(function(resolve) {
-            normalized[id] = {
-              start: pops[connection[0]],
-              finish: pops[connection[1]]
+          return $q(function(resolve,reject) {
+
+            if(!pops[connection[0]] || !pops[connection[1]]){
+              console.log('CAUGHT ERROR')
+              // console.log(pops)
+              console.log(connection)
+              reject()
+            } else {
+              pops[connection[0]].id = connection[0]
+              pops[connection[1]].id = connection[1]
+
+              normalized[id] = {
+                id: id,
+                start: pops[connection[0]],
+                finish: pops[connection[1]]
+              }
+              resolve()
             }
-            resolve()
+
+            
           })
         })
+
       })
       return promise.then(function(){
         return $q(function(resolve) {

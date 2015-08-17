@@ -12,7 +12,7 @@
 		</a>
 		
 		<div class="fr">
-		<h2>Edit <small>editor</small></h2>
+		<h2>Edit </h2>
 		</div>
 		<span class="glyphicon glyphicon-dashboard bg-fade"></span>
 		<div class="jumbotron">
@@ -35,11 +35,11 @@
 								<i class="fa fa-map-marker" style="color:#{{connection.start.color}}"></i> 
 								<i class="fa fa-bolt fa-rotate-270" style="color:yellow;margin:0 4px"></i> 
 								<i class="fa fa-map-marker" style="color:#{{connection.finish.color}}"></i> 
-								<a ui-sref="edit/connection/{{id}}">{{connection.start.name}} - {{connection.finish.name}}</a>
+								<a href="#/dashboard/edit/connection/{{id}}">{{connection.start.name}} - {{connection.finish.name}}</a>
 						  </p>
 						  <hr>
 						  <p class="row-fluid">
-						  	<a class="btn btn-primary btn-lg btn-white" ui-sref="edit/connections/new"><i class="fa fa-plus" style="color:green"></i> Add Connection</a>
+						  	<a class="btn btn-primary btn-lg btn-white" ui-sref="newconnection"><i class="fa fa-plus" style="color:green"></i> Add Connection</a>
 						  </p>
 				    </tab>
 				  </tabset>
