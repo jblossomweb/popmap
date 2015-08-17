@@ -20,8 +20,17 @@
 			<div class="container">
 				<h1>Welcome!</h1>
 				This is a demo dashboard.<br /><br />
+				The <a ui-sref="map" style="font-weight:bold">Map</a> screen should fullfill the homework assignment.<br />
+				The <a ui-sref="edit" style="font-weight:bold">Editor</a> screen should provide some basic CRUD for POPs and Connections.<br /><br />
+				<div class="notes" style="font-size:.8em">
+					<b>Notes:</b><br />
+					There is no server-side DB persistence, so all data will reset on page refresh.<br />
+					The login screen is a complete facade, and can be bypassed.<br />
+					<br />
+				</div>
 				<p>
 					<a ui-sref="map" class="btn btn-primary btn-lg btn-white"><i class="fa fa-globe"></i> Map</a>
+					<a ui-sref="edit" class="btn btn-primary btn-lg btn-white"><i class="fa fa-pencil-square"></i> Editor</a>
 					<a ui-sref="login" class="btn btn-primary btn-lg btn-white"><i class="fa fa-sign-out"></i> Logout</a>
 				</p>
 				

@@ -13,10 +13,10 @@
 			<div class="table-form">
 				<div class="form-groups">
 					<div class="form-group">
-						<input type="text" class="form-control input-lg" id="" placeholder="EMAIL">
+						<input type="text" class="form-control input-lg" ng-model="user" placeholder="USER">
 					</div>
 					<div class="form-group">
-						<input type="password" class="form-control input-lg" id="" placeholder="PASSWORD">
+						<input type="password" class="form-control input-lg" ng-model="password" placeholder="PASSWORD">
 					</div>
 					
 						
@@ -31,7 +31,7 @@
 					<span></span>
 				</label>
 				remember me
-				<span class="pass"> forgot password?</span>
+				<span class="pass" ng-show="showForgot" ng-click="demoLogin()" style="cursor:pointer"> forgot password?</span>
 			</div>			
 			</form>
 		</div>			
