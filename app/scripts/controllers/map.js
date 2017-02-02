@@ -74,7 +74,11 @@ angular.module('popmap').controller('MapCtrl', [
                 return $timeout(function(){
                   return $scope.markLocation(location,{
                     title: pop.name,
-                    label: pop.id,
+                    label: {
+                      text: pop.id.toUpperCase(),
+                      color: 'black',
+                      fontSize: '6px'
+                    },
                     icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|'+pop.color
                   }).then(function(marker){
                     location.marker = marker
